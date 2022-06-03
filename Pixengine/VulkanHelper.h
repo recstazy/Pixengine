@@ -12,6 +12,5 @@ public:
 
 private:
 	void LogGlfwExtensions(uint32_t extensionCount, const char** glfwExtensions);
-
 };
 

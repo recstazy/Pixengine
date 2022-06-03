@@ -39,10 +39,36 @@ int PhysicalDevicePicker::RatePhysicalDevice(const VkPhysicalDevice& device)
 	VkPhysicalDeviceFeatures deviceFeatures;
 	vkGetPhysicalDeviceProperties(device, &deviceProperties);
 	vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+	auto queueFamilyIndices = GetQueueFamilyIndices(device);
+
+	if (!queueFamilyIndices.IsAllFamiliesPresent())
+		return 0;
+
 	int score = 1;
 
 	if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
 		score += 1000;
 
 	return score;
+}
+
+QueueFamilyIndices PhysicalDevicePicker::GetQueueFamilyIndices(const VkPhysicalDevice& device)
+{
+	QueueFamilyIndices indices;
+	uint32_t queueFamilyCount = 0;
+	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+	std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+	int i = 0;
+	for (const auto& queueFamily : queueFamilies) 
+	{
+		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) 
+			indices.GraphicsFamily = i;
+
+		i++;
+	}
+
+	return indices;
 }
