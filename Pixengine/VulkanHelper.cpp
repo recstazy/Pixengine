@@ -1,4 +1,5 @@
 #include "VulkanHelper.h"
+#include "PhysicalDevicePicker.h"
 #include <stdexcept>
 #include <vector>
 #include <iostream>
@@ -26,6 +27,19 @@ VkResult VulkanHelper::CreateVulkanInstance(VkInstance* instance)
     createInfo.enabledLayerCount = 0;
 
     return vkCreateInstance(&createInfo, nullptr, instance);
+}
+
+bool VulkanHelper::TryPickPhysicalDevice(VkPhysicalDevice& device, const VkInstance& instance)
+{
+    PhysicalDevicePicker picker;
+    return picker.TryPickDevice(device, instance);
+}
+
+void VulkanHelper::GetDeviceName(const VkPhysicalDevice& device, std::string& name)
+{
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+    name = deviceProperties.deviceName;
 }
 
 void VulkanHelper::LogGlfwExtensions(uint32_t extensionCount, const char** glfwExtensions)

@@ -1,5 +1,6 @@
 #include "MainApplication.h"
 #include "VulkanHelper.h"
+#include <string>
 #include <stdexcept>
 #include <vector>
 #include <iostream>
@@ -24,7 +25,21 @@ void MainApplication::InitWindow()
 
 void MainApplication::InitVulkan()
 {
-	CreateVulkanInstance();
+	VulkanHelper helper;
+	VkResult result = helper.CreateVulkanInstance(&vkInstance);
+
+	if (result != VK_SUCCESS)
+		throw std::runtime_error("failed to create instance!");
+
+	VkPhysicalDevice physicalDevice;
+	bool hasCompatableDevice = helper.TryPickPhysicalDevice(physicalDevice, vkInstance);
+
+	if (!hasCompatableDevice)
+		throw std::runtime_error("No suitable device found!");
+
+	std::string deviceName;
+	helper.GetDeviceName(physicalDevice, deviceName);
+	std::cout << "Physical device to run: " << deviceName << "\n";
 }
 
 void MainApplication::MainLoop()
@@ -41,15 +56,4 @@ void MainApplication::Cleanup()
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	window = nullptr;
-}
-
-void MainApplication::CreateVulkanInstance()
-{
-	VulkanHelper helper;
-	VkResult result = helper.CreateVulkanInstance(&vkInstance);
-
-	if (result != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create instance!");
-	}
 }

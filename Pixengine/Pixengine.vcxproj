@@ -137,10 +137,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainApplication.cpp" />
+    <ClCompile Include="PhysicalDevicePicker.cpp" />
     <ClCompile Include="VulkanHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainApplication.h" />
+    <ClInclude Include="PhysicalDevicePicker.h" />
     <ClInclude Include="VulkanHelper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -30,6 +30,9 @@
     <ClCompile Include="VulkanHelper.cpp">
       <Filter>Source Files\MainApplication</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicalDevicePicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainApplication.h">
@@ -37,6 +40,9 @@
     </ClInclude>
     <ClInclude Include="VulkanHelper.h">
       <Filter>Header Files\MainApplication</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicalDevicePicker.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
