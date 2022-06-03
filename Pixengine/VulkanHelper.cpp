@@ -26,8 +26,35 @@ VkResult VulkanHelper::CreateVulkanInstance(VkInstance* instance)
     createInfo.enabledExtensionCount = glfwExtensionCount;
     createInfo.ppEnabledExtensionNames = glfwExtensions;
     
-    ApplyValidationLayers(createInfo);
+    ValidationLayers validationLayers;
+    validationLayers.ApplyLayers(createInfo);
     return vkCreateInstance(&createInfo, nullptr, instance);
+}
+
+VkResult VulkanHelper::CreateLogicalDevice(const VkPhysicalDevice& physicalDevice, VkDevice* deviceInstance)
+{
+    PhysicalDevicePicker physicalDevicePicker;
+    auto queueFamilyIndices = physicalDevicePicker.GetQueueFamilyIndices(physicalDevice);
+    float queuePriority = 1.0f;
+
+    VkDeviceQueueCreateInfo queueCreateInfo{};
+    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queueCreateInfo.queueFamilyIndex = queueFamilyIndices.GraphicsFamily.value();
+    queueCreateInfo.queueCount = 1;
+    queueCreateInfo.pQueuePriorities = &queuePriority;
+
+    VkPhysicalDeviceFeatures deviceFeatures{};
+    VkDeviceCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    createInfo.pQueueCreateInfos = &queueCreateInfo;
+    createInfo.queueCreateInfoCount = 1;
+    createInfo.pEnabledFeatures = &deviceFeatures;
+    createInfo.enabledExtensionCount = 0;
+
+    ValidationLayers validationLayers;
+    validationLayers.ApplyLayers(createInfo);
+
+    return vkCreateDevice(physicalDevice, &createInfo, nullptr, deviceInstance);
 }
 
 bool VulkanHelper::TryPickPhysicalDevice(VkPhysicalDevice& device, const VkInstance& instance)
@@ -54,27 +81,4 @@ void VulkanHelper::LogGlfwExtensions(uint32_t extensionCount, const char** glfwE
     {
         std::cout << '\t' << extension.extensionName << '\n';
     }
-}
-
-void VulkanHelper::ApplyValidationLayers(VkInstanceCreateInfo& createInfo)
-{
-    ValidationLayers layers;
-    bool isValidationEnabled = layers.IsGlobalValidationEnabled();
-    std::cout << "Validation is " << (isValidationEnabled ? "ENABLED" : "DISABLED") << "\n";
-
-    if (!isValidationEnabled)
-    {
-        createInfo.enabledLayerCount = 0;
-        return;
-    }
-
-    if (!layers.IsAllLayersSupported())
-    {
-        std::cout << "Not all the validation layers are supported, validation is disabled" << "\n";
-        createInfo.enabledLayerCount = 0;
-        return;
-    }
-
-    createInfo.enabledLayerCount = static_cast<uint32_t>(layers.VALIDATION_LAYERS.size());
-    createInfo.ppEnabledLayerNames = layers.VALIDATION_LAYERS.data();
 }

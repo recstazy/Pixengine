@@ -26,10 +26,10 @@ void MainApplication::InitWindow()
 void MainApplication::InitVulkan()
 {
 	VulkanHelper helper;
-	VkResult result = helper.CreateVulkanInstance(&vkInstance);
+	auto instanceCreateResult = helper.CreateVulkanInstance(&vkInstance);
 
-	if (result != VK_SUCCESS)
-		throw std::runtime_error("failed to create Vulkan instance!");
+	if (instanceCreateResult != VK_SUCCESS)
+		throw std::runtime_error("Failed to create Vulkan instance!");
 
 	VkPhysicalDevice physicalDevice;
 	bool hasCompatableDevice = helper.TryPickPhysicalDevice(physicalDevice, vkInstance);
@@ -40,6 +40,11 @@ void MainApplication::InitVulkan()
 	std::string deviceName;
 	helper.GetDeviceName(physicalDevice, deviceName);
 	std::cout << "Physical device to run: " << deviceName << "\n";
+
+	auto deviceCreateResult = helper.CreateLogicalDevice(physicalDevice, &logicalDevice);
+
+	if (instanceCreateResult != VK_SUCCESS)
+		throw std::runtime_error("Failed to create Vulkan Logical Device!");
 }
 
 void MainApplication::MainLoop()
@@ -52,8 +57,8 @@ void MainApplication::MainLoop()
 
 void MainApplication::Cleanup()
 {
+	vkDestroyDevice(logicalDevice, nullptr);
 	vkDestroyInstance(vkInstance, nullptr);
 	glfwDestroyWindow(window);
 	glfwTerminate();
-	window = nullptr;
 }

@@ -7,9 +7,9 @@ class PhysicalDevicePicker
 {
 public: 
 	bool TryPickDevice(VkPhysicalDevice& deviceResult, const VkInstance& instance);
+	QueueFamilyIndices GetQueueFamilyIndices(const VkPhysicalDevice& device);
 
 private:
 	int RatePhysicalDevice(const VkPhysicalDevice& device);
-	QueueFamilyIndices GetQueueFamilyIndices(const VkPhysicalDevice& device);
 };
 

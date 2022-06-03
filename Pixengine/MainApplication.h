@@ -9,6 +9,7 @@ private:
     const int HEIGHT = 480;
     GLFWwindow* window;
     VkInstance vkInstance;
+    VkDevice logicalDevice;
 
 public:
     void run();
