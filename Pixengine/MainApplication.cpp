@@ -28,7 +28,8 @@ void MainApplication::InitVulkan()
 
 void MainApplication::MainLoop()
 {
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window)) 
+    {
         glfwPollEvents();
     }
 }
@@ -78,7 +79,8 @@ void MainApplication::LogGlfwExtensions(uint32_t extensionCount, const char** gl
 
     std::cout << "available extensions:\n";
 
-    for (const auto& extension : extensions) {
+    for (const auto& extension : extensions) 
+    {
         std::cout << '\t' << extension.extensionName << '\n';
     }
 }
