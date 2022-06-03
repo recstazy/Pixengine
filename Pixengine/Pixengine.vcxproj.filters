@@ -27,9 +27,15 @@
     <ClCompile Include="MainApplication.cpp">
       <Filter>Source Files\MainApplication</Filter>
     </ClCompile>
+    <ClCompile Include="VulkanHelper.cpp">
+      <Filter>Source Files\MainApplication</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainApplication.h">
+      <Filter>Header Files\MainApplication</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanHelper.h">
       <Filter>Header Files\MainApplication</Filter>
     </ClInclude>
   </ItemGroup>

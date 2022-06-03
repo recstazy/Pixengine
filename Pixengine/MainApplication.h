@@ -19,6 +19,5 @@ private:
     void MainLoop();
     void Cleanup();
     void CreateVulkanInstance();
-    void LogGlfwExtensions(uint32_t extensionsCount, const char** glfwExtensions);
 };
 
