@@ -39,6 +39,9 @@
     <ClCompile Include="ValidationLayers.cpp">
       <Filter>Source Files\MainApplication</Filter>
     </ClCompile>
+    <ClCompile Include="DeviceInfo.cpp">
+      <Filter>Source Files\MainApplication</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainApplication.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files\MainApplication</Filter>
     </ClInclude>
     <ClInclude Include="ValidationLayers.h">
+      <Filter>Header Files\MainApplication</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceInfo.h">
       <Filter>Header Files\MainApplication</Filter>
     </ClInclude>
   </ItemGroup>

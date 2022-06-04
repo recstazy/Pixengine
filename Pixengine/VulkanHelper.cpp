@@ -31,38 +31,6 @@ VkResult VulkanHelper::CreateVulkanInstance(VkInstance* instance)
     return vkCreateInstance(&createInfo, nullptr, instance);
 }
 
-VkResult VulkanHelper::CreateLogicalDevice(const VkPhysicalDevice& physicalDevice, VkDevice* deviceInstance)
-{
-    PhysicalDevicePicker physicalDevicePicker;
-    auto queueFamilyIndices = physicalDevicePicker.GetQueueFamilyIndices(physicalDevice);
-    float queuePriority = 1.0f;
-
-    VkDeviceQueueCreateInfo queueCreateInfo{};
-    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = queueFamilyIndices.GraphicsFamily.value();
-    queueCreateInfo.queueCount = 1;
-    queueCreateInfo.pQueuePriorities = &queuePriority;
-
-    VkPhysicalDeviceFeatures deviceFeatures{};
-    VkDeviceCreateInfo createInfo{};
-    createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    createInfo.pQueueCreateInfos = &queueCreateInfo;
-    createInfo.queueCreateInfoCount = 1;
-    createInfo.pEnabledFeatures = &deviceFeatures;
-    createInfo.enabledExtensionCount = 0;
-
-    ValidationLayers validationLayers;
-    validationLayers.ApplyLayers(createInfo);
-
-    return vkCreateDevice(physicalDevice, &createInfo, nullptr, deviceInstance);
-}
-
-bool VulkanHelper::TryPickPhysicalDevice(VkPhysicalDevice& device, const VkInstance& instance)
-{
-    PhysicalDevicePicker picker;
-    return picker.TryPickDevice(device, instance);
-}
-
 void VulkanHelper::GetDeviceName(const VkPhysicalDevice& device, std::string& name)
 {
     VkPhysicalDeviceProperties deviceProperties;

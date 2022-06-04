@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DeviceInfo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainApplication.cpp" />
     <ClCompile Include="PhysicalDevicePicker.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="VulkanHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DeviceInfo.h" />
     <ClInclude Include="MainApplication.h" />
     <ClInclude Include="PhysicalDevicePicker.h" />
     <ClInclude Include="QueueFamilyIndices.h" />

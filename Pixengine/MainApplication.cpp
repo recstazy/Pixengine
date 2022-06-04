@@ -4,11 +4,13 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include "PhysicalDevicePicker.h"
 
 void MainApplication::run()
 {
 	InitWindow();
 	InitVulkan();
+	CheckMemberVariables();
 	MainLoop();
 	Cleanup();
 }
@@ -31,20 +33,14 @@ void MainApplication::InitVulkan()
 	if (instanceCreateResult != VK_SUCCESS)
 		throw std::runtime_error("Failed to create Vulkan instance!");
 
-	VkPhysicalDevice physicalDevice;
-	bool hasCompatableDevice = helper.TryPickPhysicalDevice(physicalDevice, vkInstance);
+	PhysicalDevicePicker mainDevicePicker = PhysicalDevicePicker();
 
-	if (!hasCompatableDevice)
-		throw std::runtime_error("No suitable physical device found!");
+	mainDevice = DeviceInfo();
+	mainDevice.Setup(vkInstance, mainDevicePicker);
 
 	std::string deviceName;
-	helper.GetDeviceName(physicalDevice, deviceName);
-	std::cout << "Physical device to run: " << deviceName << "\n";
-
-	auto deviceCreateResult = helper.CreateLogicalDevice(physicalDevice, &logicalDevice);
-
-	if (instanceCreateResult != VK_SUCCESS)
-		throw std::runtime_error("Failed to create Vulkan Logical Device!");
+	helper.GetDeviceName(mainDevice.GetPhysicalDevice(), deviceName);
+	std::cout << "Main Physical Device: " << deviceName << std::endl;
 }
 
 void MainApplication::MainLoop()
@@ -57,8 +53,14 @@ void MainApplication::MainLoop()
 
 void MainApplication::Cleanup()
 {
-	vkDestroyDevice(logicalDevice, nullptr);
+	mainDevice.Dispose();
 	vkDestroyInstance(vkInstance, nullptr);
 	glfwDestroyWindow(window);
 	glfwTerminate();
+}
+
+void MainApplication::CheckMemberVariables()
+{
+	const char* isMainDeviceValid = &mainDevice != nullptr ? "true" : "false";
+	std::cout << "Main Device is valid: " << isMainDeviceValid << std::endl;
 }

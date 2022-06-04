@@ -1,6 +1,7 @@
 #pragma once
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#include "DeviceInfo.h"
 
 class MainApplication
 {
@@ -9,7 +10,7 @@ private:
     const int HEIGHT = 480;
     GLFWwindow* window;
     VkInstance vkInstance;
-    VkDevice logicalDevice;
+    DeviceInfo mainDevice;
 
 public:
     void run();
@@ -19,5 +20,6 @@ private:
     void InitVulkan();
     void MainLoop();
     void Cleanup();
+    void CheckMemberVariables();
 };
 
