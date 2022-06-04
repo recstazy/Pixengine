@@ -41,6 +41,10 @@ void MainApplication::InitVulkan()
 	std::string deviceName;
 	helper.GetDeviceName(mainDevice.GetPhysicalDevice(), deviceName);
 	std::cout << "Main Physical Device: " << deviceName << std::endl;
+
+	auto surfacereateResult = glfwCreateWindowSurface(vkInstance, window, nullptr, &mainSurface);
+	if (surfacereateResult != VK_SUCCESS)
+		throw std::runtime_error("Failed to create Vulkan surface!");
 }
 
 void MainApplication::MainLoop()
@@ -54,6 +58,7 @@ void MainApplication::MainLoop()
 void MainApplication::Cleanup()
 {
 	mainDevice.Dispose();
+	vkDestroySurfaceKHR(vkInstance, mainSurface, nullptr);
 	vkDestroyInstance(vkInstance, nullptr);
 	glfwDestroyWindow(window);
 	glfwTerminate();

@@ -11,6 +11,7 @@ private:
     GLFWwindow* window;
     VkInstance vkInstance;
     DeviceInfo mainDevice;
+    VkSurfaceKHR mainSurface;
 
 public:
     void Run();
