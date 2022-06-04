@@ -6,7 +6,7 @@
 #include <iostream>
 #include "PhysicalDevicePicker.h"
 
-void MainApplication::run()
+void MainApplication::Run()
 {
 	InitWindow();
 	InitVulkan();

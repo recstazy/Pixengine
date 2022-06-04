@@ -13,7 +13,7 @@ private:
     DeviceInfo mainDevice;
 
 public:
-    void run();
+    void Run();
 
 private:
     void InitWindow();

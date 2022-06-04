@@ -65,3 +65,8 @@ VkDevice DeviceInfo::GetlogicalDevice()
 {
     return logicalDevice;
 }
+
+void DeviceInfo::GetGraphicsQueue(VkQueue& queue)
+{
+    vkGetDeviceQueue(logicalDevice, queueFamilyIndices.GraphicsFamily.value(), 0, &queue);
+}

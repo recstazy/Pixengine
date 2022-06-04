@@ -18,6 +18,7 @@ public:
 	QueueFamilyIndices GetQueueFamilyindices();
 	VkPhysicalDevice GetPhysicalDevice();
 	VkDevice GetlogicalDevice();
+	void GetGraphicsQueue(VkQueue& queue);
 
 private:
 	bool CreateLogicalDevice(const VkInstance& vkInstance);
