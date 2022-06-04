@@ -19,6 +19,7 @@ public:
 	VkPhysicalDevice GetPhysicalDevice();
 	VkDevice GetlogicalDevice();
 	void GetGraphicsQueue(VkQueue& queue);
+	void GetPresentationQueue(VkQueue& queue);
 
 private:
 	bool CreateLogicalDevice(const VkInstance& vkInstance);

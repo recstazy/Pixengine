@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <set>
 
 struct QueueFamilyIndices
 {
@@ -8,5 +9,6 @@ public:
 	std::optional<uint32_t> PresentationFamily;
 
 public:
-	bool IsAllFamiliesPresent();
+	bool IsAllFamiliesPresent() const;
+	void IndicesToSet(std::set<uint32_t>& set) const;
 };

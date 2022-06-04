@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <set>
 #include "DeviceInfo.h"
 #include "ValidationLayers.h"
 
@@ -28,19 +29,27 @@ void DeviceInfo::Dispose()
 
 bool DeviceInfo::CreateLogicalDevice(const VkInstance& vkInstance)
 {
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+    std::set<uint32_t> uniqueQueueFamilies;
+    queueFamilyIndices.IndicesToSet(uniqueQueueFamilies);
+    
     float queuePriority = 1.0f;
 
-    VkDeviceQueueCreateInfo queueCreateInfo{};
-    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = queueFamilyIndices.GraphicsFamily.value();
-    queueCreateInfo.queueCount = 1;
-    queueCreateInfo.pQueuePriorities = &queuePriority;
+    for (uint32_t queueFamily : uniqueQueueFamilies) 
+    {
+        VkDeviceQueueCreateInfo queueCreateInfo{};
+        queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queueCreateInfo.queueFamilyIndex = queueFamily;
+        queueCreateInfo.queueCount = 1;
+        queueCreateInfo.pQueuePriorities = &queuePriority;
+        queueCreateInfos.push_back(queueCreateInfo);
+    }
 
     VkPhysicalDeviceFeatures deviceFeatures{};
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    createInfo.pQueueCreateInfos = &queueCreateInfo;
-    createInfo.queueCreateInfoCount = 1;
+    createInfo.pQueueCreateInfos = queueCreateInfos.data();
+    createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
     createInfo.pEnabledFeatures = &deviceFeatures;
     createInfo.enabledExtensionCount = 0;
 
@@ -69,4 +78,9 @@ VkDevice DeviceInfo::GetlogicalDevice()
 void DeviceInfo::GetGraphicsQueue(VkQueue& queue)
 {
     vkGetDeviceQueue(logicalDevice, queueFamilyIndices.GraphicsFamily.value(), 0, &queue);
+}
+
+void DeviceInfo::GetPresentationQueue(VkQueue& queue)
+{
+    vkGetDeviceQueue(logicalDevice, queueFamilyIndices.PresentationFamily.value(), 0, &queue);
 }
