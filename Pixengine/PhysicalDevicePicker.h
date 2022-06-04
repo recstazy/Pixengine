@@ -5,11 +5,16 @@
 
 class PhysicalDevicePicker
 {
+private:
+	const VkInstance* instance;
+	const VkSurfaceKHR* surface;
+
 public: 
-	bool TryPickDevice(VkPhysicalDevice& deviceResult, const VkInstance& instance);
-	QueueFamilyIndices GetQueueFamilyIndices(const VkPhysicalDevice& device);
+	PhysicalDevicePicker(const VkInstance& vkInstance, const VkSurfaceKHR& vkSurface);
+	bool TryPickDevice(VkPhysicalDevice& deviceResult) const;
+	QueueFamilyIndices GetQueueFamilyIndices(const VkPhysicalDevice& device) const;
 
 private:
-	int RatePhysicalDevice(const VkPhysicalDevice& device);
+	int RatePhysicalDevice(const VkPhysicalDevice& device) const;
 };
 

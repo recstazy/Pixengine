@@ -10,10 +10,10 @@ private:
 	VkPhysicalDevice physicalDevice;
 	VkDevice logicalDevice;
 	QueueFamilyIndices queueFamilyIndices;
-	PhysicalDevicePicker picker;
+	const PhysicalDevicePicker* picker;
 
 public:
-	void Setup(const VkInstance& vkInstance, PhysicalDevicePicker& const picker);
+	DeviceInfo(const VkInstance& vkInstance, const PhysicalDevicePicker& devicePicker);
 	void Dispose();
 	QueueFamilyIndices GetQueueFamilyindices();
 	VkPhysicalDevice GetPhysicalDevice();

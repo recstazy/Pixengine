@@ -10,7 +10,7 @@ private:
     const int HEIGHT = 480;
     GLFWwindow* window;
     VkInstance vkInstance;
-    DeviceInfo mainDevice;
+    DeviceInfo* mainDevice;
     VkSurfaceKHR mainSurface;
 
 public:

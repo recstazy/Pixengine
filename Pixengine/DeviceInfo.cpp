@@ -2,18 +2,18 @@
 #include "DeviceInfo.h"
 #include "ValidationLayers.h"
 
-void DeviceInfo::Setup(const VkInstance& vkInstance, PhysicalDevicePicker& const picker)
+DeviceInfo::DeviceInfo(const VkInstance& vkInstance, const PhysicalDevicePicker& devicePicker)
 {
     physicalDevice = VK_NULL_HANDLE;
     logicalDevice = VK_NULL_HANDLE;
 
-    this->picker = picker;
-    bool isDevicePicked = picker.TryPickDevice(physicalDevice, vkInstance);
+    picker = &devicePicker;
+    bool isDevicePicked = picker->TryPickDevice(physicalDevice);
 
     if (!isDevicePicked)
         throw std::runtime_error("Device info couldn't be created because Device Picker couldn't pick a Physical Device");
 
-    queueFamilyIndices = picker.GetQueueFamilyIndices(physicalDevice);
+    queueFamilyIndices = picker->GetQueueFamilyIndices(physicalDevice);
     bool isCreatedLogicalDevice = CreateLogicalDevice(vkInstance);
 
     if (!isCreatedLogicalDevice)

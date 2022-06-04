@@ -2,17 +2,23 @@
 #include <vector>
 #include <map>
 
-bool PhysicalDevicePicker::TryPickDevice(VkPhysicalDevice& deviceResult, const VkInstance& instance)
+PhysicalDevicePicker::PhysicalDevicePicker(const VkInstance& vkInstance, const VkSurfaceKHR& vkSurface)
+{
+	instance = &vkInstance;
+	surface = &vkSurface;
+}
+
+bool PhysicalDevicePicker::TryPickDevice(VkPhysicalDevice& deviceResult) const
 {
 	deviceResult = VK_NULL_HANDLE;
 	uint32_t deviceCount = 0;
-	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+	vkEnumeratePhysicalDevices(*instance, &deviceCount, nullptr);
 
 	if (deviceCount == 0)
 		return false;
 
 	std::vector<VkPhysicalDevice> devices(deviceCount);
-	vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+	vkEnumeratePhysicalDevices(*instance, &deviceCount, devices.data());
 
 	std::multimap<int, VkPhysicalDevice> devicesRated;
 
@@ -33,7 +39,7 @@ bool PhysicalDevicePicker::TryPickDevice(VkPhysicalDevice& deviceResult, const V
 	return false;
 }
 
-int PhysicalDevicePicker::RatePhysicalDevice(const VkPhysicalDevice& device)
+int PhysicalDevicePicker::RatePhysicalDevice(const VkPhysicalDevice& device) const
 {
 	VkPhysicalDeviceProperties deviceProperties;
 	VkPhysicalDeviceFeatures deviceFeatures;
@@ -49,10 +55,14 @@ int PhysicalDevicePicker::RatePhysicalDevice(const VkPhysicalDevice& device)
 	if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
 		score += 1000;
 
+	// Devices with the same queue for graphics and presentation work faster
+	if (queueFamilyIndices.GraphicsFamily.value() == queueFamilyIndices.PresentationFamily.value())
+		score += 100;
+
 	return score;
 }
 
-QueueFamilyIndices PhysicalDevicePicker::GetQueueFamilyIndices(const VkPhysicalDevice& device)
+QueueFamilyIndices PhysicalDevicePicker::GetQueueFamilyIndices(const VkPhysicalDevice& device) const
 {
 	QueueFamilyIndices indices;
 	uint32_t queueFamilyCount = 0;
@@ -66,6 +76,12 @@ QueueFamilyIndices PhysicalDevicePicker::GetQueueFamilyIndices(const VkPhysicalD
 	{
 		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) 
 			indices.GraphicsFamily = i;
+
+		VkBool32 isPresentationSupported = false;
+		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, *surface, &isPresentationSupported);
+
+		if (isPresentationSupported)
+			indices.PresentationFamily = i;
 
 		i++;
 	}
